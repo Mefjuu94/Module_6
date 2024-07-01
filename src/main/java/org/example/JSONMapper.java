@@ -1,11 +1,8 @@
 package org.example;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 
@@ -13,7 +10,7 @@ public class JSONMapper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public Post mapTo(String JSON) {
+    public static Post mapTo(String JSON) {
         Post post = new Post();
 
         try {
@@ -30,7 +27,7 @@ public class JSONMapper {
     }
 
 
-    public ArrayList<Post> mapToListOfPosts(String JSON) {
+    public static ArrayList<Post> mapToListOfPosts(String JSON) {
         try {
             JsonNode node = MAPPER.readTree(JSON);
             ArrayList<Post> allPosts = new ArrayList<>();
@@ -43,7 +40,7 @@ public class JSONMapper {
         }
     }
 
-    public String mapToJSON(Post post) {
+    public static String mapToJSON(Post post) {
         try {
            return MAPPER.writeValueAsString(post);
         } catch (JsonProcessingException e) {

@@ -12,33 +12,46 @@ public class JSONPlaceholderFetcher {
 
     private final String URL = "https://jsonplaceholder.typicode.com/posts";
 
-    private HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client;
 
+    public JSONPlaceholderFetcher(HttpClient client) {
+        this.client = client;
+    }
 
     public Post getSinglePost(int id) {
 
-        try {
-            HttpRequest request = HttpRequest.newBuilder(new URI(URL + "/" + id)).GET().build();
-            Post post = new Post();
-            JSONMapper mapper = new JSONMapper();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            post = mapper.mapTo(response.body());
-            return post;
-        } catch (URISyntaxException | IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        if (id < 1 || id > 100){
+            System.out.println("invalid number! id > 1 | id < 100");
+            return null;
         }
+
+            try {
+                HttpRequest request = HttpRequest.newBuilder(new URI(URL + "/" + id)).GET().build();
+                Post post;
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    post = JSONMapper.mapTo(response.body());
+                    return post;
+                }
+                return null;
+            } catch (URISyntaxException | IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
     }
 
     // -> używając metody GET, zapytaj o pojedynczy post, używając podanego id przy budowie URI i zwróć ten post;
     public ArrayList<Post> getAllPosts() {
-        JSONMapper jsonMapper = new JSONMapper();
 
         try {
             HttpRequest request = HttpRequest.newBuilder(new URI(URL)).GET().build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            return jsonMapper.mapToListOfPosts(response.body());
+            if (response.statusCode() == 200) {
+                return JSONMapper.mapToListOfPosts(response.body());
+            }
+            return null;
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
