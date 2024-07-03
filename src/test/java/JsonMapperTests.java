@@ -7,28 +7,25 @@ import org.junit.jupiter.api.Test;
 public class JsonMapperTests {
 
     @Test
-    public void mapToJSONHappyPath(){
-        Post postToEx5 = new Post(999,99,"lalala","body");
+    public void mapToJSONHappyPath() {
+        Post postToEx5 = new Post(999, 99, "lalala", "body");
 
         String expected = "{\"userID\":999,\"id\":99,\"title\":\"lalala\",\"body\":\"body\"}";
-        Assertions.assertEquals(expected,JSONMapper.mapToJSON(postToEx5));
+        Assertions.assertEquals(expected, JSONMapper.mapToJSON(postToEx5));
     }
 
     @Test
-    public void mapToJSONUnHappyPath(){
+    public void mapToJSONUnHappyPath() {
 
-        Post postToEx5 = new Post(999,99,"lalala","body");
+        Post postToEx5 = new Post(999, 99, "lalala", "body");
 
         String expected = "{\"userID\":999,\"id\":99,\"ttle\":\"lalala\",\"body\":\"body\"}";
-        Assertions.assertNotEquals(expected,JSONMapper.mapToJSON(postToEx5));
+        Assertions.assertNotEquals(expected, JSONMapper.mapToJSON(postToEx5));
     }
 
     @Test
-    public void mapToJSONUnHappyPathExcptions(){
-
-        Post postToEx5 = new Post(23/2,99,"lalala","1");
-
-        String expected = "{\"userID\":999,\"id\":99,\"ttle\":\"lalala\",\"body\":\"body\"}";
-        Assertions.assertNotEquals(expected,JSONMapper.mapToJSON(postToEx5));
+    public void mapToUnHappyPathExcptions() {
+        String expected = "{\"\"id\":99,\"ttle\":\"lalala\",\"body\":\"body\"}";
+        Assertions.assertThrows(RuntimeException.class, () -> JSONMapper.mapTo(expected));
     }
 }

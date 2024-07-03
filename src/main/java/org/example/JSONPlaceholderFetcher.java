@@ -64,8 +64,6 @@ public class JSONPlaceholderFetcher {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println(response.body());
-
             return response.statusCode() == 201;
         } catch (URISyntaxException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
